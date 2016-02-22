@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "MoveCondition.h"
+#include "Condition.h"
 
 //default for not used
 #define NONE ""
@@ -30,6 +31,6 @@ struct MoveEffect{
 	std::string _effectType;
 	std::string _whoIsAffected;
 	std::string _statAffected;
-	std::string _status;
-	MoveCondition _condition;
+	Condition _condition;
+	MoveCondition _moveCondition;
 };

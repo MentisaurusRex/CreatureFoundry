@@ -18,15 +18,15 @@ void Move::addEffect(int modifier,
 						std::string effectType, 
 						std::string whoIsAffected, 
 						std::string statAffected, 
-						std::string status, 
-						MoveCondition condition){
+						Condition condition, 
+						MoveCondition moveCondition){
 	MoveEffect newEffect;
 	newEffect._modifier = modifier;
 	newEffect._effectType = effectType;
 	newEffect._whoIsAffected = whoIsAffected;
 	newEffect._statAffected = statAffected;
-	newEffect._status = status;
 	newEffect._condition = condition;
+	newEffect._moveCondition = moveCondition;
 
 	_moveEffects.push_back(newEffect);
 

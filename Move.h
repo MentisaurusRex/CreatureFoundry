@@ -8,7 +8,7 @@ public:
 	Move(void);
 	~Move(void);
 
-	void addEffect(int damage, std::string effectType, std::string whoIsAffected, std::string statAffected, std::string status, MoveCondition condition);
+	void addEffect(int damage, std::string effectType, std::string whoIsAffected, std::string statAffected, Condition condition, MoveCondition moveCondition);
 	int getPriority();
 	int getAccuracy();
 

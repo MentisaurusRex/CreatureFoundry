@@ -27,13 +27,16 @@ void Battle::startBattle(){
 		
 		startTurn();
 		Move playerMove = playerTurn();
+		std::system("cls");
 		Move enemyMove = enemyTurn();
 
 		if(fight(playerMove, enemyMove)){
 			break;
 		}
 		
-		endTurn(result);
+		if(endTurn()){
+			break;
+		}
 	}
 }
 
@@ -70,18 +73,18 @@ Move Battle::enemyTurn(){
 
 bool Battle::fight(Move playerMove, Move enemyMove){	
 
-	if(playerMove.getPriority() > enemyMove.getAccuracy()){
+	if(playerMove.getPriority() > enemyMove.getPriority()){
 		if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
 		if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
 	}
 
-	else if(playerMove.getPriority() < enemyMove.getAccuracy()){
+	else if(playerMove.getPriority() < enemyMove.getPriority()){
 		if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
 		if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
 	}
 
 	else{
-		if(calculateSpeed(_playerCreature) > calculateSpeed(_playerCreature)){
+		if(calculateSpeed(_playerCreature) > calculateSpeed(_enemyCreature)){
 			if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
 			if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
 		}
@@ -108,18 +111,16 @@ bool Battle::checkForFinish(){
 
 
 bool Battle::execute(Creature &user, Move move, Creature &opposed){
-
-	std::cout << std::endl;
-	std::cout << std::endl;
+	
 	std::cout << user.getName() << " used: " << move.getName() << std::endl; 
 
-	if(!isDodged(opposed) && doesHit(move)){
+	if(doesHit(move)){
 		for(int i = 0; i < move.getMoveEffects().size(); i++){
 			MoveEffect effect = move.getMoveEffects()[i];
 
 			if(testCondition(user, effect, opposed)){
 
-				if(effect._effectType == DAMAGE){
+				if(effect._effectType == DAMAGE && !isDodged(opposed)){
 					if(effect._whoIsAffected == SELF){
 						applyDamage(user, effect, user);
 					}
@@ -147,37 +148,38 @@ bool Battle::execute(Creature &user, Move move, Creature &opposed){
 			}
 		}
 	}
+	std::cout << std::endl;
 	return(checkForFinish());
 }
 
 bool Battle::testCondition(Creature user, MoveEffect effect, Creature opposed){
-	if(effect._condition._type == NONE){
+	if(effect._moveCondition._type == NONE){
 		return true;
 	}	
 
-	else if(effect._condition._type == STAT_COMPARE){
+	else if(effect._moveCondition._type == STAT_COMPARE){
 
-		int userStat = user.getStat(effect._condition._comparing);
-		int opposedStat = opposed.getStat(effect._condition._compareTo);
+		int userStat = user.getStat(effect._moveCondition._comparing);
+		int opposedStat = opposed.getStat(effect._moveCondition._compareTo);
 
-		if(effect._condition._howToCompare == GREATER){
+		if(effect._moveCondition._howToCompare == GREATER){
 			return (userStat > opposedStat);
 		}
-		else if(effect._condition._howToCompare == GREATER_EQUAL){
+		else if(effect._moveCondition._howToCompare == GREATER_EQUAL){
 			return (userStat >= opposedStat);
 		}
-		else if(effect._condition._howToCompare == LESSER){
+		else if(effect._moveCondition._howToCompare == LESSER){
 			return (userStat < opposedStat);
 		}
-		else if(effect._condition._howToCompare == LESSER_EQUAL){
+		else if(effect._moveCondition._howToCompare == LESSER_EQUAL){
 			return (userStat <= opposedStat);
 		}
 	}
 
-	else if(effect._condition._type == CHANCE){
+	else if(effect._moveCondition._type == CHANCE){
 		int chance = (rand() % 100) + 1;
 
-		return (chance <= effect._condition._chance);
+		return (chance <= effect._moveCondition._chance);
 
 	}
 	
@@ -185,22 +187,23 @@ bool Battle::testCondition(Creature user, MoveEffect effect, Creature opposed){
 	
 }
 
-int Battle::endTurn(int result){
+bool Battle::endTurn(){
 
-	std::cout << std::endl;	
-	if(result == 1){
-		std::cout << "You win" << std::endl;
+	if(_playerCreature.getConditions().size() > 0){
+		doConditions(_playerCreature);
+		if(checkForFinish()){
+			return true;
+		}
 	}
-	if(result == -1){
-		std::cout << "You lose" << std::endl;
+
+	if(_enemyCreature.getConditions().size() > 0){
+		doConditions(_enemyCreature);
+		if(checkForFinish()){
+			return true;
+		}
 	}
-
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	return 0;
-
+	
+	return false;
 }
 
 void Battle::applyDamage(Creature &user, MoveEffect effect, Creature &opposed){
@@ -209,6 +212,7 @@ void Battle::applyDamage(Creature &user, MoveEffect effect, Creature &opposed){
 
 	int realDamage = damage - (damage * blocked);
 	opposed.setCurrentHealth(opposed.getCurrentHealth() - realDamage);
+	applyCondition(effect, opposed);
 
 	std::cout <<"It caused: " << realDamage << " damage!" << std::endl; 	
 }
@@ -257,6 +261,27 @@ void Battle::applyDebuff(Creature &creatureToDebuff, MoveEffect effect){
 
 	else if(effect._statAffected == ENERGY){
 		creatureToDebuff.getBattleStats().addToEnergy(effect._modifier);
+	}
+}
+
+void Battle::applyCondition(MoveEffect effect, Creature &opposed){
+	if(effect._condition._name != NONE){
+		opposed.addCondition(effect._condition);
+	}
+}
+
+void Battle::doConditions(Creature &affected){
+	std::vector<Condition> conditions = affected.getConditions();
+
+	for(int i = 0; i < conditions.size(); i++){
+		Condition condition = conditions[i];
+
+		if(condition._name == BLEED){
+			int damage = affected.getMaxHealth() * .1;
+			affected.setCurrentHealth(affected.getCurrentHealth() - damage);
+			std::cout << affected.getName() << " took " << damage << " bleed damage." << std::endl;
+		}
+
 	}
 }
 

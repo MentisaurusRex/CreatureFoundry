@@ -2,6 +2,7 @@
 #include "Armor.h"
 #include "Weapon.h"
 #include "Move.h"
+#include "Condition.h"
 
 struct BattleStats{
 	int currentHealth;
@@ -60,6 +61,11 @@ public:
 	Armor getNaturalArmor();
 	Weapon getNaturalWeapon();
 
+	bool addCondition(Condition condition);
+	std::vector<Condition> getConditions();
+	void clearCondition(std::string name);
+	void clearAllConditions();
+
 	void setBattleStats();
 	BattleStats& getBattleStats();
 
@@ -76,7 +82,7 @@ private:
 	int _energy;
 
 	BattleStats _battleStats;
-
+	std::vector<Condition> _conditions;
 	Armor _naturalArmor;
 	Weapon _naturalWeapon;
 	Move _moveSet[4];
