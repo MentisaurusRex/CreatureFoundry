@@ -210,11 +210,15 @@ void Battle::applyDamage(Creature &user, MoveEffect effect, Creature &opposed){
 	int damage = calculateDamage(effect._modifier, user);
 	double blocked = calculateBlocked(opposed);
 
-	int realDamage = damage - (damage * blocked);
+	int potentialDamage = damage - (damage * blocked);
+
+	int realDamage = (potentialDamage > 1) ? potentialDamage : 1;
+
+
 	opposed.setCurrentHealth(opposed.getCurrentHealth() - realDamage);
 	applyCondition(effect, opposed);
 
-	std::cout <<"It caused: " << realDamage << " damage!" << std::endl; 	
+	std::cout <<"It caused " << realDamage << " damage!" << std::endl; 	
 }
 
 //As of right now this is exactly the same as applyDebuff
@@ -239,6 +243,9 @@ void Battle::applyBuff(Creature &creatureToBuff, MoveEffect effect){
 	else if(effect._statAffected == ENERGY){
 		creatureToBuff.getBattleStats().addToEnergy(effect._modifier);
 	}
+
+	std::cout <<"It raised " << effect._statAffected << " by " << effect._modifier << " stages!" << std::endl; 
+
 }
 
 //As of right now this is exactly the same as applyBuff
@@ -262,6 +269,8 @@ void Battle::applyDebuff(Creature &creatureToDebuff, MoveEffect effect){
 	else if(effect._statAffected == ENERGY){
 		creatureToDebuff.getBattleStats().addToEnergy(effect._modifier);
 	}
+
+	std::cout <<"It lowered " << effect._statAffected << " by " << effect._modifier * -1 << " stages!" << std::endl; 
 }
 
 void Battle::applyCondition(MoveEffect effect, Creature &opposed){
@@ -320,7 +329,7 @@ int Battle::calculateSpeed(Creature creature){
 
 int Battle::calculateDamage(int power, Creature creature){
 	double fullAttack = creature.getAttack() + creature.getNaturalWeapon().getWeaponDamage();
-	double scaledAttack = fullAttack + (fullAttack * (creature.getBattleStats().attackMod * .10));
+	double scaledAttack = (fullAttack * ((creature.getBattleStats().attackMod + 3) / 3));
 
 	double bonus = scaledAttack * .0125;
 	return power * bonus;
@@ -328,7 +337,7 @@ int Battle::calculateDamage(int power, Creature creature){
 
 double Battle::calculateBlocked(Creature creature){
 	double fullArmor = creature.getArmor() + creature.getNaturalArmor().getArmorValue();
-	double scaledArmor = fullArmor + (fullArmor * (creature.getBattleStats().armorMod * .10));
+	double scaledArmor = (fullArmor * ((creature.getBattleStats().armorMod + 3) / 3));
 
 	return scaledArmor * .002;
 }

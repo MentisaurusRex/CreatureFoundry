@@ -11,8 +11,11 @@ ArmorCodex::~ArmorCodex(void)
 }
 
 void ArmorCodex::init(){
-	Armor basicArmor = Armor("simpleShell", 50);
-	_armorList.push_back(basicArmor);
+	Armor simpleShell = Armor("simpleShell", 20);
+	_armorList.push_back(simpleShell);
+
+	Armor spiralShell = Armor("spiralShell", 80);
+	_armorList.push_back(spiralShell);
 }
 
 Armor ArmorCodex::getArmor(int index){
