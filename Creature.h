@@ -46,6 +46,9 @@ public:
 	Move getMove(int index);
 
 	std::string getName();
+
+	int getStat(std::string name);
+
 	int getMaxHealth();
 	int getCurrentHealth();
 	void setCurrentHealth(int newHealth);

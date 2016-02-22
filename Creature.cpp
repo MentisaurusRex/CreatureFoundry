@@ -40,6 +40,27 @@ std::string Creature::getName(){
 	return _name;
 }
 
+int Creature::getStat(std::string name){
+	if(name == HEALTH){
+		return getCurrentHealth();
+	}
+	else if(name == ATTACK){
+		return getAttack();
+	}
+	else if(name == ARMOR){
+		return getArmor();
+	}
+	else if(name == AGILITY){
+		return getAgility();
+	}
+	else if(name == ENERGY){
+		return getEnergy();
+	}
+	else{
+		return -1;
+	}
+}
+
 int Creature::getMaxHealth(){
 	return _maxHealth;
 }

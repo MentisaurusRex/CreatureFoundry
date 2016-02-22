@@ -1,8 +1,11 @@
 #include "Move.h"
 
 
-Move::Move(std::string name){
+Move::Move(std::string name, int priority, int accuracy){
 	_name = name;
+	_priority = priority;
+	_accuracy = accuracy;
+
 }
 
 Move::Move(void){
@@ -11,16 +14,30 @@ Move::Move(void){
 Move::~Move(void){
 }
 
-void Move::addEffect(int modifier, std::string effectType, std::string whoIsAffected, std::string statAffected, std::string status){
+void Move::addEffect(int modifier, 
+						std::string effectType, 
+						std::string whoIsAffected, 
+						std::string statAffected, 
+						std::string status, 
+						MoveCondition condition){
 	MoveEffect newEffect;
 	newEffect._modifier = modifier;
 	newEffect._effectType = effectType;
 	newEffect._whoIsAffected = whoIsAffected;
 	newEffect._statAffected = statAffected;
 	newEffect._status = status;
+	newEffect._condition = condition;
 
 	_moveEffects.push_back(newEffect);
 
+}
+
+int Move::getPriority(){
+	return _priority;
+}
+
+int Move::getAccuracy(){
+	return _accuracy;
 }
 
 std::string Move::getName(){
