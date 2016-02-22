@@ -337,7 +337,7 @@ int Battle::calculateSpeed(Creature creature){
 
 int Battle::calculateDamage(int power, Creature creature){
 	double fullAttack = creature.getAttack() + creature.getNaturalWeapon().getWeaponDamage();
-	double scaledAttack = (fullAttack * ((creature.getBattleStats().attackMod + 3) / 3));
+	double scaledAttack = (fullAttack * ((creature.getBattleStats().attackMod + 3.0) / 3.0));
 
 	double bonus = scaledAttack * .0125;
 	return power * bonus;

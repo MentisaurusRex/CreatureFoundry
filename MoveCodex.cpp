@@ -41,7 +41,7 @@ void MoveCodex::init(){
 	_moveList.push_back(shellWithdraw);
 
 	Move ram = Move("Ram", 0, 100);
-	ram.addEffect(20, DAMAGE, ENEMY, NONE, ConditionCodex::get(NONE), MoveConditionCodex::get(NONE));
+	ram.addEffect(30, DAMAGE, ENEMY, NONE, ConditionCodex::get(NONE), MoveConditionCodex::get(NONE));
 	_moveList.push_back(ram);
 
 	Move gooSlide = Move("Goo Slide", 5, 100);
