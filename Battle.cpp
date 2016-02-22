@@ -74,23 +74,23 @@ Move Battle::enemyTurn(){
 bool Battle::fight(Move playerMove, Move enemyMove){	
 
 	if(playerMove.getPriority() > enemyMove.getPriority()){
-		if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
-		if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
+		if (executeMove(_playerCreature, playerMove, _enemyCreature)) return true;
+		if (executeMove(_enemyCreature, enemyMove, _playerCreature)) return true;
 	}
 
 	else if(playerMove.getPriority() < enemyMove.getPriority()){
-		if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
-		if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
+		if (executeMove(_enemyCreature, enemyMove, _playerCreature)) return true;
+		if (executeMove(_playerCreature, playerMove, _enemyCreature)) return true;
 	}
 
 	else{
 		if(calculateSpeed(_playerCreature) > calculateSpeed(_enemyCreature)){
-			if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
-			if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
+			if (executeMove(_playerCreature, playerMove, _enemyCreature)) return true;
+			if (executeMove(_enemyCreature, enemyMove, _playerCreature)) return true;
 		}
 		else{
-			if (execute(_enemyCreature, enemyMove, _playerCreature)) return true;
-			if (execute(_playerCreature, playerMove, _enemyCreature)) return true;
+			if (executeMove(_enemyCreature, enemyMove, _playerCreature)) return true;
+			if (executeMove(_playerCreature, playerMove, _enemyCreature)) return true;
 		}
 	}
 	return false;
@@ -110,49 +110,53 @@ bool Battle::checkForFinish(){
 
 
 
-bool Battle::execute(Creature &user, Move move, Creature &opposed){
+bool Battle::executeMove(Creature &user, Move move, Creature &opposed){
 	
 	std::cout << user.getName() << " used: " << move.getName() << std::endl; 
 
 	if(doesHit(move)){
-		for(int i = 0; i < move.getMoveEffects().size(); i++){
-			MoveEffect effect = move.getMoveEffects()[i];
-
-			if(testCondition(user, effect, opposed)){
-
-				if(effect._effectType == DAMAGE && !isDodged(opposed)){
-					if(effect._whoIsAffected == SELF){
-						applyDamage(user, effect, user);
-					}
-					if(effect._whoIsAffected == ENEMY){
-						applyDamage(user, effect, opposed);
-					}
-				}
-				else if(effect._effectType == BUFF){
-					if(effect._whoIsAffected == SELF){
-						applyBuff(user, effect);
-					}
-					if(effect._whoIsAffected == ENEMY){
-						applyBuff(opposed, effect);
-					}
-				}
-
-				else if(effect._effectType == DEBUFF){
-					if(effect._whoIsAffected == SELF){
-						applyDebuff(user, effect);
-					}
-					if(effect._whoIsAffected == ENEMY){
-						applyDebuff(opposed, effect);
-					}
-				}
-			}
+		for(int i = 0; i < move.getEffects().size(); i++){
+			Effect effect = move.getEffects()[i];
+			executeEffect(user, effect, opposed);
 		}
 	}
 	std::cout << std::endl;
 	return(checkForFinish());
 }
 
-bool Battle::testCondition(Creature user, MoveEffect effect, Creature opposed){
+void Battle::executeEffect(Creature &user, Effect effect, Creature &opposed){
+
+	if(testCondition(user, effect, opposed)){
+
+		if(effect._effectType == DAMAGE && !isDodged(opposed)){
+			if(effect._whoIsAffected == SELF){
+				applyDamage(user, effect, user);
+			}
+			if(effect._whoIsAffected == ENEMY){
+				applyDamage(user, effect, opposed);
+			}
+		}
+		else if(effect._effectType == BUFF){
+			if(effect._whoIsAffected == SELF){
+				applyBuff(user, effect);
+			}
+			if(effect._whoIsAffected == ENEMY){
+				applyBuff(opposed, effect);
+			}
+		}
+
+		else if(effect._effectType == DEBUFF){
+			if(effect._whoIsAffected == SELF){
+				applyDebuff(user, effect);
+			}
+			if(effect._whoIsAffected == ENEMY){
+				applyDebuff(opposed, effect);
+			}
+		}
+	}
+}
+
+bool Battle::testCondition(Creature user, Effect effect, Creature opposed){
 	if(effect._moveCondition._type == NONE){
 		return true;
 	}	
@@ -206,7 +210,7 @@ bool Battle::endTurn(){
 	return false;
 }
 
-void Battle::applyDamage(Creature &user, MoveEffect effect, Creature &opposed){
+void Battle::applyDamage(Creature &user, Effect effect, Creature &opposed){
 	int damage = calculateDamage(effect._modifier, user);
 	double blocked = calculateBlocked(opposed);
 
@@ -219,10 +223,14 @@ void Battle::applyDamage(Creature &user, MoveEffect effect, Creature &opposed){
 	applyCondition(effect, opposed);
 
 	std::cout <<"It caused " << realDamage << " damage!" << std::endl; 	
+
+	if(user.getNaturalWeapon().getWeaponEffect()._name != NONE){
+		executeEffect(user, user.getNaturalWeapon().getWeaponEffect(), opposed);
+	}
 }
 
 //As of right now this is exactly the same as applyDebuff
-void Battle::applyBuff(Creature &creatureToBuff, MoveEffect effect){
+void Battle::applyBuff(Creature &creatureToBuff, Effect effect){
 
 	if(effect._statAffected == HEALTH){
 		creatureToBuff.getBattleStats().addToHealth(effect._modifier);
@@ -249,7 +257,7 @@ void Battle::applyBuff(Creature &creatureToBuff, MoveEffect effect){
 }
 
 //As of right now this is exactly the same as applyBuff
-void Battle::applyDebuff(Creature &creatureToDebuff, MoveEffect effect){
+void Battle::applyDebuff(Creature &creatureToDebuff, Effect effect){
 	if(effect._statAffected == HEALTH){
 		creatureToDebuff.getBattleStats().addToHealth(effect._modifier);
 	}
@@ -273,7 +281,7 @@ void Battle::applyDebuff(Creature &creatureToDebuff, MoveEffect effect){
 	std::cout <<"It lowered " << effect._statAffected << " by " << effect._modifier * -1 << " stages!" << std::endl; 
 }
 
-void Battle::applyCondition(MoveEffect effect, Creature &opposed){
+void Battle::applyCondition(Effect effect, Creature &opposed){
 	if(effect._condition._name != NONE){
 		opposed.addCondition(effect._condition);
 	}

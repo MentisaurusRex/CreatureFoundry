@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include "MoveEffect.h"
+#include "Effect.h"
+
 class Move
 {
 public:
@@ -13,11 +14,11 @@ public:
 	int getAccuracy();
 
 	std::string getName();
-	std::vector<MoveEffect> getMoveEffects();
+	std::vector<Effect> getEffects();
 
 private:
 	std::string _name;
-	std::vector<MoveEffect> _moveEffects;
+	std::vector<Effect> _effectList;
 	int _priority;
 	int _accuracy;
 

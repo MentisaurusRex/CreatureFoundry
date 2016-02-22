@@ -19,15 +19,16 @@ private:
 
 	int startTurn();
 	bool fight(Move playerMove, Move enemyMove);
-	bool execute(Creature &user, Move move, Creature &opposed);
-	bool testCondition(Creature user, MoveEffect effect, Creature opposed);
+	bool executeMove(Creature &user, Move move, Creature &opposed);
+	void executeEffect(Creature &user, Effect effect, Creature &opposed);
+	bool testCondition(Creature user, Effect effect, Creature opposed);
 	bool endTurn();
 	bool checkForFinish();
 
-	void applyDamage(Creature &user, MoveEffect effect, Creature &opposed);
-	void applyBuff(Creature &creatureToBuff, MoveEffect effect);
-	void applyDebuff(Creature &creatureToDebuff, MoveEffect effect);
-	void applyCondition(MoveEffect effect, Creature &opposed);
+	void applyDamage(Creature &user, Effect effect, Creature &opposed);
+	void applyBuff(Creature &creatureToBuff, Effect effect);
+	void applyDebuff(Creature &creatureToDebuff, Effect effect);
+	void applyCondition(Effect effect, Creature &opposed);
 
 	void doConditions(Creature &affected);
 

@@ -22,11 +22,9 @@
 #define AGILITY "agility"
 #define ENERGY "energy"
 
-//status effects
-#define BLEED "bleed"
 
-
-struct MoveEffect{
+struct Effect{
+	std::string _name;
 	int _modifier;
 	std::string _effectType;
 	std::string _whoIsAffected;

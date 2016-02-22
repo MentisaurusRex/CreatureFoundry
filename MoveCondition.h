@@ -9,8 +9,12 @@
 #define GREATER ">"
 #define GREATER_EQUAL ">="
 
+//names
+#define CHANCE30 "30% chance"
+
 
 struct MoveCondition{
+	std::string _name;
 	std::string _type;
 	std::string _comparing;
 	std::string _howToCompare;

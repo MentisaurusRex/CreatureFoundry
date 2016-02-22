@@ -20,7 +20,7 @@ void Move::addEffect(int modifier,
 						std::string statAffected, 
 						Condition condition, 
 						MoveCondition moveCondition){
-	MoveEffect newEffect;
+	Effect newEffect;
 	newEffect._modifier = modifier;
 	newEffect._effectType = effectType;
 	newEffect._whoIsAffected = whoIsAffected;
@@ -28,7 +28,7 @@ void Move::addEffect(int modifier,
 	newEffect._condition = condition;
 	newEffect._moveCondition = moveCondition;
 
-	_moveEffects.push_back(newEffect);
+	_effectList.push_back(newEffect);
 
 }
 
@@ -44,6 +44,6 @@ std::string Move::getName(){
 	return _name;
 }
 
-std::vector<MoveEffect> Move::getMoveEffects(){
-	return _moveEffects;
+std::vector<Effect> Move::getEffects(){
+	return _effectList;
 }
