@@ -30,6 +30,7 @@ private:
 
 	int calculateSpeed(Creature creature);
 	bool isDodged(Creature creature);
+	bool doesHit(Move move);
 	int calculateDamage(int power, Creature creature);
 	double calculateBlocked(Creature creature);
 

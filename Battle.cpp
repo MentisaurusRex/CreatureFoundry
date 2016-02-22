@@ -113,7 +113,7 @@ bool Battle::execute(Creature &user, Move move, Creature &opposed){
 	std::cout << std::endl;
 	std::cout << user.getName() << " used: " << move.getName() << std::endl; 
 
-	if(!isDodged(opposed)){
+	if(!isDodged(opposed) && doesHit(move)){
 		for(int i = 0; i < move.getMoveEffects().size(); i++){
 			MoveEffect effect = move.getMoveEffects()[i];
 
@@ -262,7 +262,7 @@ void Battle::applyDebuff(Creature &creatureToDebuff, MoveEffect effect){
 
 bool Battle::isDodged(Creature creature){
 
-	int dodgeChance = rand() % 100;
+	int dodgeChance = rand() % 100 + 1;
 
 	double agility = creature.getAgility() + (creature.getAgility() * (creature.getBattleStats().agilityMod * .10));
 	double dodge = (.97 * agility)/(1 + (.0273 * agility));
@@ -273,6 +273,17 @@ bool Battle::isDodged(Creature creature){
 	}
 	else{
 		return false;
+	}
+}
+
+bool Battle::doesHit(Move move){
+	int hitChance = rand() % 100 + 1;
+	if(hitChance > move.getAccuracy()){
+		std::cout << "The attack missed" << std::endl;
+		return false;
+	}
+	else{
+		return true;
 	}
 }
 

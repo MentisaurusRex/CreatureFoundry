@@ -24,7 +24,7 @@ void MoveCodex::init(){
 	molt.addEffect(1, BUFF, SELF, AGILITY, NONE, noCondition);
 	_moveList.push_back(molt);
 
-	Move snip = Move("Snip", 0, 100);
+	Move snip = Move("Snip", 0, 0);
 	snip.addEffect(10, DAMAGE, ENEMY, NONE, BLEED, noCondition);
 	_moveList.push_back(snip);
 
