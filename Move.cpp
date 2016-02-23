@@ -5,7 +5,6 @@ Move::Move(std::string name, int priority, int accuracy){
 	_name = name;
 	_priority = priority;
 	_accuracy = accuracy;
-
 }
 
 Move::Move(void){
@@ -19,7 +18,8 @@ void Move::addEffect(int modifier,
 						std::string whoIsAffected, 
 						std::string statAffected, 
 						Condition condition, 
-						MoveCondition moveCondition){
+						MoveCondition moveCondition,
+						int critChance){
 	Effect newEffect;
 	newEffect._modifier = modifier;
 	newEffect._effectType = effectType;
@@ -27,6 +27,7 @@ void Move::addEffect(int modifier,
 	newEffect._statAffected = statAffected;
 	newEffect._condition = condition;
 	newEffect._moveCondition = moveCondition;
+	newEffect._critChance = critChance;
 
 	_effectList.push_back(newEffect);
 

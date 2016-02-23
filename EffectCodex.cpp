@@ -29,6 +29,17 @@ void EffectCodex::init(){
 	acidic._condition = ConditionCodex::get(NONE);
 	acidic._moveCondition = MoveConditionCodex::get(CHANCE30);
 	_effectList.push_back(acidic);
+
+	//RANCID VAPORS
+	Effect rancidVapors;
+	rancidVapors._name = RANCIDVAPORS;
+	rancidVapors._modifier = -1;
+	rancidVapors._effectType = DEBUFF;
+	rancidVapors._whoIsAffected = ENEMY;
+	rancidVapors._statAffected = AGILITY;
+	rancidVapors._condition = ConditionCodex::get(NONE);
+	rancidVapors._moveCondition = MoveConditionCodex::get(CHANCE30);
+	_effectList.push_back(rancidVapors);
 }
 
 Effect EffectCodex::get(std::string effectName){

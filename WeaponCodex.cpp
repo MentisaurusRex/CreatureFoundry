@@ -20,11 +20,12 @@ void WeaponCodex::init(){
 
 	//1
 	Weapon gooeyMucus = Weapon("Gooey Mucus", 10);
-	gooeyMucus.addWeaponAbility(EffectCodex::get(ACIDIC));
+	gooeyMucus.addWeaponAbility(ACIDIC, EffectCodex::get(ACIDIC), 0, 0, 0, 0);
 	_weaponList.push_back(gooeyMucus);
 
 	//2
 	Weapon narrowBeak = Weapon("Narrow Beak", 25);
+	narrowBeak.addWeaponAbility("Very Sharp", EffectCodex::get(NONE), 0, 0, 50, 0);
 	_weaponList.push_back(narrowBeak);
 
 	//3
@@ -33,6 +34,7 @@ void WeaponCodex::init(){
 
 	//4
 	Weapon sprouts = Weapon("Sprouts", 20);
+	sprouts.addWeaponAbility(RANCIDVAPORS, EffectCodex::get(RANCIDVAPORS), 0, 0, 0, 0);
 	_weaponList.push_back(sprouts);
 
 

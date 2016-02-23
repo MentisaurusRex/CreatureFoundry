@@ -31,4 +31,6 @@ struct Effect{
 	std::string _statAffected;
 	Condition _condition;
 	MoveCondition _moveCondition;
+	int _critChance;
+	double critMultiplier;
 };

@@ -223,6 +223,17 @@ void Battle::applyDamage(Creature &user, Effect effect, Creature &opposed){
 	int damage = calculateDamage(effect._modifier, user);
 	double blocked = calculateBlocked(opposed);
 
+	int critChance = user.getNaturalWeapon().getWeaponCritChance() + effect._critChance;
+	if((rand() % 100) + 1 <= critChance){
+		std::cout <<"Critical hit! " ;
+		if(user.getNaturalWeapon().getWeaponCritMultiplier() != 0){
+			damage *= user.getNaturalWeapon().getWeaponCritMultiplier();
+		}
+		else{
+			damage *= 1.5;
+		}
+	}
+
 	int potentialDamage = damage - (damage * blocked);
 
 	int realDamage = (potentialDamage > 1) ? potentialDamage : 1;

@@ -3,6 +3,7 @@
 #include "Effect.h"
 
 #define ACIDIC "acidic"
+#define RANCIDVAPORS "rancid vapors"
 
 class EffectCodex
 {

@@ -9,7 +9,13 @@ public:
 	Move(void);
 	~Move(void);
 
-	void addEffect(int damage, std::string effectType, std::string whoIsAffected, std::string statAffected, Condition condition, MoveCondition moveCondition);
+	void addEffect(int damage, 
+						std::string effectType, 
+						std::string whoIsAffected, 
+						std::string statAffected, 
+						Condition condition, 
+						MoveCondition moveCondition, 
+						int critChance);
 	int getPriority();
 	int getAccuracy();
 
@@ -21,6 +27,5 @@ private:
 	std::vector<Effect> _effectList;
 	int _priority;
 	int _accuracy;
-
 };
 

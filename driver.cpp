@@ -16,7 +16,7 @@ int main(int argc, char** argv){
 	EffectCodex::init();
 	creatureCodex.init();
 
-	battle.init(creatureCodex.getCreature(4), creatureCodex.getCreature(1));
+	battle.init(creatureCodex.getCreature(2), creatureCodex.getCreature(1));
 	battle.startBattle();
 
 	std::cin >> in;
