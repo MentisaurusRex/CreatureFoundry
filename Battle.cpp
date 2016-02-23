@@ -112,9 +112,8 @@ bool Battle::checkForFinish(){
 
 bool Battle::executeMove(Creature &user, Move move, Creature &opposed){
 	
-	std::cout << user.getName() << " used: " << move.getName() << std::endl; 
-
-	if(doesHit(move)){
+	if(doesHit(move) && noConditionsProhibit(user)){
+		std::cout << user.getName() << " used: " << move.getName() << std::endl; 
 		for(int i = 0; i < move.getEffects().size(); i++){
 			Effect effect = move.getEffects()[i];
 			executeEffect(user, effect, opposed);
@@ -122,6 +121,16 @@ bool Battle::executeMove(Creature &user, Move move, Creature &opposed){
 	}
 	std::cout << std::endl;
 	return(checkForFinish());
+}
+
+bool Battle::noConditionsProhibit(Creature user){
+	if(user.hasCondition(SICKENED)){
+		if((rand() % 100) + 1 <= 40){
+			std::cout << user.getName() << " is sick and cant act!" << std::endl;
+			return false;
+		}
+	}
+	return true;
 }
 
 void Battle::executeEffect(Creature &user, Effect effect, Creature &opposed){
@@ -299,6 +308,12 @@ void Battle::doConditions(Creature &affected){
 			std::cout << affected.getName() << " took " << damage << " bleed damage." << std::endl;
 		}
 
+		if(condition._name == SICKENED){
+			if(affected.minusConditionTurn(SICKENED)){
+				std::cout << affected.getName() << "'s sickness wore off!" << std::endl;
+				affected.clearCondition(SICKENED);
+			}
+		}
 	}
 }
 
@@ -345,7 +360,7 @@ int Battle::calculateDamage(int power, Creature creature){
 
 double Battle::calculateBlocked(Creature creature){
 	double fullArmor = creature.getArmor() + creature.getNaturalArmor().getArmorValue();
-	double scaledArmor = (fullArmor * ((creature.getBattleStats().armorMod + 3) / 3));
+	double scaledArmor = (fullArmor * ((creature.getBattleStats().armorMod + 3.0) / 3.0));
 
 	return scaledArmor * .002;
 }

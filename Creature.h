@@ -63,6 +63,8 @@ public:
 
 	bool addCondition(Condition condition);
 	std::vector<Condition> getConditions();
+	bool hasCondition(std::string name);
+	bool minusConditionTurn(std::string name);
 	void clearCondition(std::string name);
 	void clearAllConditions();
 

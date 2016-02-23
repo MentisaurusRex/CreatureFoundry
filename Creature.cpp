@@ -107,8 +107,32 @@ bool Creature::addCondition(Condition condition){
 	return true;
 }
 
+bool Creature::hasCondition(std::string name){
+	for(int i = 0; i < _conditions.size(); i++){
+		if(_conditions[i]._name == name){
+			return true;
+		}
+	}
+	return false;
+}
+
 std::vector<Condition> Creature::getConditions(){
 	return _conditions;
+}
+
+bool Creature::minusConditionTurn(std::string name){
+	for(int i = 0; i < _conditions.size(); i++){
+		if(_conditions[i]._name == name){
+			_conditions[i]._turnsLeft--;
+			if(_conditions[i]._turnsLeft <= 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+	return false;
 }
 
 void Creature::clearCondition(std::string name){

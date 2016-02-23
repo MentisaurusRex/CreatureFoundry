@@ -21,8 +21,12 @@ void ConditionCodex::init(){
 	Condition bleedCondition;
 	bleedCondition._name = BLEED;
 	bleedCondition._turnsLeft = -1;
-
 	_conditionList.push_back(bleedCondition);
+
+	Condition sickenedCondition;
+	sickenedCondition._name = SICKENED;
+	sickenedCondition._turnsLeft = 4;
+	_conditionList.push_back(sickenedCondition);
 }
 
 Condition ConditionCodex::get(std::string conditionName){

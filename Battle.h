@@ -24,6 +24,7 @@ private:
 	bool testCondition(Creature user, Effect effect, Creature opposed);
 	bool endTurn();
 	bool checkForFinish();
+	bool noConditionsProhibit(Creature user);
 
 	void applyDamage(Creature &user, Effect effect, Creature &opposed);
 	void applyBuff(Creature &creatureToBuff, Effect effect);
