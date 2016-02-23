@@ -40,6 +40,28 @@ void EffectCodex::init(){
 	rancidVapors._condition = ConditionCodex::get(NONE);
 	rancidVapors._moveCondition = MoveConditionCodex::get(CHANCE30);
 	_effectList.push_back(rancidVapors);
+
+	//WEAPON REGROWTH
+	Effect weaponRegrowth;
+	weaponRegrowth._name = WEAPONREGROWTH;
+	weaponRegrowth._modifier = 0;
+	weaponRegrowth._effectType = NONE;
+	weaponRegrowth._whoIsAffected = SELF;
+	weaponRegrowth._statAffected = NONE;
+	weaponRegrowth._condition = ConditionCodex::get(NONE);
+	weaponRegrowth._moveCondition = MoveConditionCodex::get(NONE);
+	_effectList.push_back(weaponRegrowth);
+
+	//ARMOR REGROWTH
+	Effect armorRegrowth;
+	armorRegrowth._name = ARMORREGROWTH;
+	armorRegrowth._modifier = 1;
+	armorRegrowth._effectType = BUFF;
+	armorRegrowth._whoIsAffected = SELF;
+	armorRegrowth._statAffected = ARMOR;
+	armorRegrowth._condition = ConditionCodex::get(NONE);
+	armorRegrowth._moveCondition = MoveConditionCodex::get(NONE);
+	_effectList.push_back(armorRegrowth);
 }
 
 Effect EffectCodex::get(std::string effectName){

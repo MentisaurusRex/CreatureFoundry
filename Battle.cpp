@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "EffectCodex.h"
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
@@ -272,21 +273,31 @@ void Battle::applyBuff(Creature &creatureToBuff, Effect effect){
 		creatureToBuff.getBattleStats().addToEnergy(effect._modifier);
 	}
 
-	std::cout <<"It raised " << effect._statAffected << " by " << effect._modifier << " stages!" << std::endl; 
+	std::cout <<"It raised " << creatureToBuff.getName() << "'s " << effect._statAffected << " by " << effect._modifier << " stages!" << std::endl; 
 
 }
 
 //As of right now this is exactly the same as applyBuff
 void Battle::applyDebuff(Creature &creatureToDebuff, Effect effect){
+
+	bool worked = true;
+
 	if(effect._statAffected == HEALTH){
 		creatureToDebuff.getBattleStats().addToHealth(effect._modifier);
 	}
 
 	else if(effect._statAffected == ATTACK){
-		creatureToDebuff.getBattleStats().addToAttack(effect._modifier);
+		if(creatureToDebuff.getNaturalWeapon().getWeaponAbilityName() == WEAPONREGROWTH){
+			std::cout << creatureToDebuff.getName() << "'s regrowth prevented its attack from falling." << std::endl;
+			worked = false;
+		}
+		else{
+			creatureToDebuff.getBattleStats().addToAttack(effect._modifier);
+		}
 	}
 
 	else if(effect._statAffected == ARMOR){
+
 		creatureToDebuff.getBattleStats().addToArmor(effect._modifier);
 	}
 
@@ -298,7 +309,9 @@ void Battle::applyDebuff(Creature &creatureToDebuff, Effect effect){
 		creatureToDebuff.getBattleStats().addToEnergy(effect._modifier);
 	}
 
-	std::cout <<"It lowered " << effect._statAffected << " by " << effect._modifier * -1 << " stages!" << std::endl; 
+	if(worked){
+		std::cout <<"It lowered " << creatureToDebuff.getName() << "'s " << effect._statAffected << " by " << effect._modifier * -1 << " stages!" << std::endl; 
+	}
 }
 
 void Battle::applyCondition(Effect effect, Creature &opposed){

@@ -16,6 +16,7 @@ void WeaponCodex::init(){
 
 	//0
 	Weapon simpleClaw = Weapon("Simple Claw", 20);
+	simpleClaw.addWeaponAbility(WEAPONREGROWTH, EffectCodex::get(WEAPONREGROWTH), 0, 0, 0, 0);
 	_weaponList.push_back(simpleClaw);
 
 	//1

@@ -4,6 +4,8 @@
 
 #define ACIDIC "acidic"
 #define RANCIDVAPORS "rancid vapors"
+#define WEAPONREGROWTH "weapon regrowth"
+#define ARMORREGROWTH "armor regrowth"
 
 class EffectCodex
 {
