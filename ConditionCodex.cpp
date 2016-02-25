@@ -27,14 +27,19 @@ void ConditionCodex::init(){
 	sickenedCondition._name = SICKENED;
 	sickenedCondition._turnsLeft = 4;
 	_conditionList.push_back(sickenedCondition);
+
+	Condition grappledCondition;
+	grappledCondition._name = GRAPPLED;
+	grappledCondition._turnsLeft = 3;
+	_conditionList.push_back(grappledCondition);
 }
 
 Condition ConditionCodex::get(std::string conditionName){
 
-	for(int i = 0; i < _conditionList.size(); i++){
+	for(unsigned int i = 0; i < _conditionList.size(); i++){
 		if(_conditionList[i]._name == conditionName){
 			return _conditionList[i];
 		}
 	}
-
+	return _conditionList[0];
 }

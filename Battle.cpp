@@ -66,7 +66,7 @@ Move Battle::playerTurn(){
 }
 
 Move Battle::enemyTurn(){
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	int selection = rand() % 4;
 
 	return _enemyCreature.getMove(selection);
@@ -113,11 +113,14 @@ bool Battle::checkForFinish(){
 
 bool Battle::executeMove(Creature &user, Move move, Creature &opposed){
 	
-	if(doesHit(move) && noConditionsProhibit(user)){
-		std::cout << user.getName() << " used: " << move.getName() << std::endl; 
-		for(int i = 0; i < move.getEffects().size(); i++){
-			Effect effect = move.getEffects()[i];
-			executeEffect(user, effect, opposed);
+
+	if(noConditionsProhibit(user)){
+		if(doesHit(move) || opposed.hasCondition(GRAPPLED)){
+			std::cout << user.getName() << " used: " << move.getName() << std::endl; 
+			for(unsigned int i = 0; i < move.getEffects().size(); i++){
+				Effect effect = move.getEffects()[i];
+				executeEffect(user, effect, opposed);
+			}
 		}
 	}
 	std::cout << std::endl;
@@ -138,11 +141,11 @@ void Battle::executeEffect(Creature &user, Effect effect, Creature &opposed){
 
 	if(testCondition(user, effect, opposed)){
 
-		if(effect._effectType == DAMAGE && !isDodged(opposed)){
+		if(effect._effectType == DAMAGE){
 			if(effect._whoIsAffected == SELF){
 				applyDamage(user, effect, user);
 			}
-			if(effect._whoIsAffected == ENEMY){
+			if(effect._whoIsAffected == ENEMY && (opposed.hasCondition(GRAPPLED) || !isDodged(opposed))){
 				applyDamage(user, effect, opposed);
 			}
 		}
@@ -228,14 +231,14 @@ void Battle::applyDamage(Creature &user, Effect effect, Creature &opposed){
 	if((rand() % 100) + 1 <= critChance){
 		std::cout <<"Critical hit! " ;
 		if(user.getNaturalWeapon().getWeaponCritMultiplier() != 0){
-			damage *= user.getNaturalWeapon().getWeaponCritMultiplier();
+			damage = (int)(damage * user.getNaturalWeapon().getWeaponCritMultiplier());
 		}
 		else{
-			damage *= 1.5;
+			damage = (int)(damage * 1.5);
 		}
 	}
 
-	int potentialDamage = damage - (damage * blocked);
+	int potentialDamage = (int)(damage - (damage * blocked));
 
 	int realDamage = (potentialDamage > 1) ? potentialDamage : 1;
 
@@ -323,11 +326,11 @@ void Battle::applyCondition(Effect effect, Creature &opposed){
 void Battle::doConditions(Creature &affected){
 	std::vector<Condition> conditions = affected.getConditions();
 
-	for(int i = 0; i < conditions.size(); i++){
+	for(unsigned int i = 0; i < conditions.size(); i++){
 		Condition condition = conditions[i];
 
 		if(condition._name == BLEED){
-			int damage = affected.getMaxHealth() * .1;
+			int damage = (int)(affected.getMaxHealth() * .1);
 			affected.setCurrentHealth(affected.getCurrentHealth() - damage);
 			std::cout << affected.getName() << " took " << damage << " bleed damage." << std::endl;
 		}
@@ -336,6 +339,16 @@ void Battle::doConditions(Creature &affected){
 			if(affected.minusConditionTurn(SICKENED)){
 				std::cout << affected.getName() << "'s sickness wore off!" << std::endl;
 				affected.clearCondition(SICKENED);
+			}
+		}
+
+		if(condition._name == GRAPPLED){
+			if(affected.minusConditionTurn(GRAPPLED)){
+				std::cout << affected.getName() << " broke out of the grapple!" << std::endl;
+				affected.clearCondition(GRAPPLED);
+			}
+			else{
+				std::cout << affected.getName() << " is grappled!" << std::endl;
 			}
 		}
 	}
@@ -370,8 +383,7 @@ bool Battle::doesHit(Move move){
 
 int Battle::calculateSpeed(Creature creature){
 	double speed = creature.getAgility() + (creature.getAgility() * (creature.getBattleStats().agilityMod * .10));
-	return speed;
-
+	return (int)speed;
 }
 
 int Battle::calculateDamage(int power, Creature creature){
@@ -379,7 +391,7 @@ int Battle::calculateDamage(int power, Creature creature){
 	double scaledAttack = (fullAttack * ((creature.getBattleStats().attackMod + 3.0) / 3.0));
 
 	double bonus = scaledAttack * .0125;
-	return power * bonus;
+	return (int)(power * bonus);
 }
 
 double Battle::calculateBlocked(Creature creature){

@@ -38,6 +38,10 @@ void WeaponCodex::init(){
 	sprouts.addWeaponAbility(RANCIDVAPORS, EffectCodex::get(RANCIDVAPORS), 0, 0, 0, 0);
 	_weaponList.push_back(sprouts);
 
+	//5
+	Weapon appendages = Weapon("Appendages", 20);
+	_weaponList.push_back(appendages);
+
 
 }
 

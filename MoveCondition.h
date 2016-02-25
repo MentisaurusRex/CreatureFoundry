@@ -11,6 +11,7 @@
 
 //names
 #define CHANCE30 "30% chance"
+#define CHANCE50 "50% chance"
 
 
 struct MoveCondition{

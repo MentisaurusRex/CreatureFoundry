@@ -52,6 +52,14 @@ void CreatureCodex::init(){
 	cepalil.addMove(_moveCodex.getMove(14));
 	_creatureList.push_back(cepalil);
 
+	//5
+	Creature stellum = Creature("Stellum", 26, 18, 22, 9, 100, _armorCodex.getArmor(4), _weaponCodex.getWeapon(5));
+	stellum.addMove(_moveCodex.getMove(6));
+	stellum.addMove(_moveCodex.getMove(17));
+	stellum.addMove(_moveCodex.getMove(18));
+	stellum.addMove(_moveCodex.getMove(19));
+	_creatureList.push_back(stellum);
+
 	
 }
 

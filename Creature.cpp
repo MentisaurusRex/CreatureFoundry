@@ -98,7 +98,7 @@ Weapon Creature::getNaturalWeapon(){
 }
 
 bool Creature::addCondition(Condition condition){
-	for(int i = 0; i < _conditions.size(); i++){
+	for(unsigned int i = 0; i < _conditions.size(); i++){
 		if(_conditions[i]._name == condition._name){
 			return false;
 		}
@@ -108,7 +108,7 @@ bool Creature::addCondition(Condition condition){
 }
 
 bool Creature::hasCondition(std::string name){
-	for(int i = 0; i < _conditions.size(); i++){
+	for(unsigned int i = 0; i < _conditions.size(); i++){
 		if(_conditions[i]._name == name){
 			return true;
 		}
@@ -121,7 +121,7 @@ std::vector<Condition> Creature::getConditions(){
 }
 
 bool Creature::minusConditionTurn(std::string name){
-	for(int i = 0; i < _conditions.size(); i++){
+	for(unsigned int i = 0; i < _conditions.size(); i++){
 		if(_conditions[i]._name == name){
 			_conditions[i]._turnsLeft--;
 			if(_conditions[i]._turnsLeft <= 0){
@@ -136,7 +136,7 @@ bool Creature::minusConditionTurn(std::string name){
 }
 
 void Creature::clearCondition(std::string name){
-	for(int i = 0; i < _conditions.size(); i++){
+	for(unsigned int i = 0; i < _conditions.size(); i++){
 		if(_conditions[i]._name == name){
 			_conditions.erase(_conditions.begin() + i);
 		}

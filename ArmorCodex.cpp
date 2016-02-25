@@ -27,6 +27,10 @@ void ArmorCodex::init(){
 	//3
 	Armor toughFiber = Armor("Tough Fiber", 40);
 	_armorList.push_back(toughFiber);
+
+	//4
+	Armor spinySkin = Armor("Spiny Skin", 22);
+	_armorList.push_back(spinySkin);
 }
 
 Armor ArmorCodex::getArmor(int index){

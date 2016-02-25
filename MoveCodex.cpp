@@ -105,6 +105,22 @@ void MoveCodex::init(){
 	Move strongOdor = Move("Strong Odor", 0, 100);
 	strongOdor.addEffect(20, DAMAGE, ENEMY, NONE, ConditionCodex::get(SICKENED), MoveConditionCodex::get(NONE), 0);
 	_moveList.push_back(strongOdor);
+
+	//17 
+	Move jet = Move("Jet", 0, 100);
+	jet.addEffect(40, DAMAGE, ENEMY, NONE, ConditionCodex::get(NONE), MoveConditionCodex::get(NONE), 0);
+	_moveList.push_back(jet);
+
+	//18 
+	Move latchOn = Move("Latch On", 0, 100);
+	latchOn.addEffect(10, DAMAGE, ENEMY, NONE, ConditionCodex::get(GRAPPLED), MoveConditionCodex::get(NONE), 0);
+	_moveList.push_back(latchOn);
+
+	//19
+	Move dissolve = Move("Dissolve", 0, 50);
+	dissolve.addEffect(30, DAMAGE, ENEMY, NONE, ConditionCodex::get(NONE), MoveConditionCodex::get(NONE), 0);
+	dissolve.addEffect(-1, DEBUFF, ENEMY, ARMOR, ConditionCodex::get(NONE), MoveConditionCodex::get(CHANCE50), 0);
+	_moveList.push_back(dissolve);
 	
 }
 

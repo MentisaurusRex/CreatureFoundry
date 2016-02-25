@@ -66,9 +66,10 @@ void EffectCodex::init(){
 
 Effect EffectCodex::get(std::string effectName){
 
-	for(int i = 0; i < _effectList.size(); i++){
+	for(unsigned int i = 0; i < _effectList.size(); i++){
 		if(_effectList[i]._name == effectName){
 			return _effectList[i];
 		}
 	}
+	return _effectList[0];
 }

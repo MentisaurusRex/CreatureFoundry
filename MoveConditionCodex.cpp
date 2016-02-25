@@ -23,13 +23,20 @@ void MoveConditionCodex::init(){
 	percent30Condition._type = CHANCE;
 	percent30Condition._chance = 30;
 	_moveConditionList.push_back(percent30Condition);
+
+	MoveCondition percent50Condition;
+	percent30Condition._name = CHANCE50;
+	percent30Condition._type = CHANCE;
+	percent30Condition._chance = 50;
+	_moveConditionList.push_back(percent50Condition);
 }
 
 MoveCondition MoveConditionCodex::get(std::string conditionName){
 
-	for(int i = 0; i < _moveConditionList.size(); i++){
+	for(unsigned int i = 0; i < _moveConditionList.size(); i++){
 		if(_moveConditionList[i]._name == conditionName){
 			return _moveConditionList[i];
 		}
 	}
+	return _moveConditionList[0];
 }
